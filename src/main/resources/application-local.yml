@@ -1,0 +1,22 @@
+spring:
+  # 1. H2 DB 연결
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+
+  # 2. 콘솔 화면 켜기
+  h2:
+    console:
+      enabled: true
+
+  # 3. 테이블 자동 생성
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+# 4. 상태 확인
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
