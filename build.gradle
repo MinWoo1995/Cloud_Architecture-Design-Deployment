@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.2'
+    id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -25,17 +25,28 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.h2database:h2'
+    // 1. AWS 버전 관리 (BOM) - 버전 충돌 방지 핵심
+    implementation platform('software.amazon.awssdk:bom:2.21.12')
+    implementation platform('io.awspring.cloud:spring-cloud-aws-dependencies:3.3.0')
+
+    // 2. AWS 기능
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store'
+
+    // 3. 스프링 부트 핵심 기능
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
+
+    // 4. DB 및 유틸리티
     runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+
+    // 5. 테스트 (중복 제거 및 통합)
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

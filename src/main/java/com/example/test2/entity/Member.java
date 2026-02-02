@@ -23,10 +23,16 @@ public class Member {
     @Column(length = 4)
     private String mbti;
 
+    private String profileImageKey;
+
     @Builder
     public Member(String name, int age, String mbti) {
         this.name = name;
         this.age = age;
         this.mbti = mbti;
+    }
+
+    public void updateProfileImage(String key) {
+        this.profileImageKey = key;
     }
 }

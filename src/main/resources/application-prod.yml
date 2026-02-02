@@ -1,11 +1,41 @@
 spring:
+  config:
+    import: "optional:aws-parameterstore:/config/application/"
+
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${/config/application/spring.datasource.url}
+    username: ${/config/application/spring.datasource.username}
+    password: ${/config/application/spring.datasource.password}
+
+  cloud:
+    aws:
+      parameterstore:
+        region: ap-northeast-2
+      s3:
+        bucket: "test2-profile-bucket"
+        region:
+          static: ap-northeast-2
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ap-northeast-2
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
 
 management:
-  endpoint:
-    health:
-      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+  info:
+    env:
+      enabled: true
+
+info:
+  team-name: ${team-name}
